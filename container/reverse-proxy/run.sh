@@ -16,12 +16,14 @@ docker run \
     -d \
     --restart always \
     --volumes-from "proxy-data" \
-    -v /home/core/resources/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
+    -v /home/core/resource/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     jwilder/docker-gen \
     -notify-sighup proxy -watch -only-exposed -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
 
 # Automated SSL certificate generation for proxied containers.
+# Add the following argument below to use the Let's Encrypt staging environment (avoids rate limits, for testing):
+#     -e "ACME_CA_URI=https://acme-staging.api.letsencrypt.org/directory"
 docker run \
 	--name "proxy-encrypt" \
 	-d \

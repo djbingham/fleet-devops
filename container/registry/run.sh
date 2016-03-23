@@ -23,5 +23,4 @@ docker run \
     -e REGISTRY_HTTP_TLS_CERTIFICATE=/etc/nginx/certs/docker.davidjbingham.co.uk.crt \
     -e REGISTRY_HTTP_TLS_KEY=/etc/nginx/certs/docker.davidjbingham.co.uk.key \
     -e REGISTRY_HTTP_SECRET=my_registry_secret_1343y57134134141ml9 \
-    --restart always \
     registry:2

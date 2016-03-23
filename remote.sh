@@ -1,5 +1,8 @@
 #! /bin/bash
 
+HOST=$1
+TASK=$2
+
 echo ""
 echo "-- Compacting scripts."
 tar -cf containers.tar ./*
@@ -19,14 +22,14 @@ ssh -T $HOST <<ENDSSH
 	tar -xf /tmp/containers.tar -C /tmp/containers
 
 	echo ""
-	echo "-- Running init.sh."
+	echo "-- Running script $TASK.sh."
 
 	pushd /tmp/containers > /dev/null
-	. task/init.sh
+	. $TASK.sh
 	popd > /dev/null
 
 	echo ""
-	echo "-- /Running init.sh."
+	echo "-- /script $TASK.sh."
 	echo ""
 
 	echo "-- Removing scripts from host."

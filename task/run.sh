@@ -4,17 +4,17 @@ pushd "$( dirname "${BASH_SOURCE[0]}" )/.." > /dev/null
 
 echo ""
 echo "Copying resources to user home directory."
-cp -r resources /home/core/resources
+cp -r resource /home/core/resource
 
 echo ""
 echo "Initialising reverse-proxy containers."
-. container/reverseProxy/volumes.sh
-. container/reverseProxy/run.sh
+. container/reverse-proxy/volumes.sh
+. container/reverse-proxy/run.sh
 
 echo ""
 echo "Initialising Docker registry containers."
-. container/dockerRegistry/volumes.sh
-. container/dockerRegistry/run.sh
+. container/registry/volumes.sh
+. container/registry/run.sh
 
 echo ""
 echo "Initialising Gogs containers."
@@ -25,5 +25,10 @@ echo ""
 echo "Initialising Jenkins containers."
 . container/jenkins/volumes.sh
 . container/jenkins/run.sh
+
+echo ""
+echo "Initialising Toran Proxy containers."
+. container/toran-proxy/volumes.sh
+. container/toran-proxy/run.sh
 
 popd > /dev/null
