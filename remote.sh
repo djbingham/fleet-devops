@@ -2,6 +2,11 @@
 
 HOST=$1
 TASK=$2
+if [ "$3" == "" ]; then
+	DOMAIN=$(echo $HOST | sed -e 's/^.*\@//')
+else
+	DOMAIN=$3
+fi
 
 echo ""
 echo "-- Compacting scripts."
@@ -16,21 +21,16 @@ echo "-- /Uploading scripts."
 echo ""
 
 ssh -T $HOST <<ENDSSH
+	DOMAIN=$DOMAIN
+
 	echo ""
 	echo "-- Unpacking scripts on host."
 	mkdir /tmp/containers
 	tar -xf /tmp/containers.tar -C /tmp/containers
 
-	echo ""
-	echo "-- Running script $TASK.sh."
-
 	pushd /tmp/containers > /dev/null
-	. $TASK.sh
+	. local.sh $TASK $DOMAIN
 	popd > /dev/null
-
-	echo ""
-	echo "-- /script $TASK.sh."
-	echo ""
 
 	echo "-- Removing scripts from host."
 	rm -rf /tmp/containers.tar /tmp/containers

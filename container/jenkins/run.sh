@@ -9,10 +9,8 @@ docker run \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v $(which docker):/usr/bin/docker \
     -v /usr/lib/libdevmapper.so.1.02:/usr/lib/libdevmapper.so.1.02 \
-	-e VIRTUAL_HOST=ci.davidjbingham.co.uk \
-	-e VIRTUAL_PORT=8080 \
-	-e LETSENCRYPT_HOST=ci.davidjbingham.co.uk \
-	-e LETSENCRYPT_EMAIL=davidjohnbingham@gmail.com \
+	-e VIRTUAL_HOST="$JENKINS_DOMAIN" \
+	-e VIRTUAL_PORT="8080" \
 	jenkins
 
 # Jenkins slave for running Docker-reliant builds.

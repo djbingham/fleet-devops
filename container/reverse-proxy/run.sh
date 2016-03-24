@@ -8,6 +8,7 @@ docker run \
 	-p 80:80 \
     -p 443:443 \
     --volumes-from "proxy-data" \
+    --volumes-from "proxy-encrypt-data" \
     nginx
 
 # Automated config generator for Nginx proxy.
@@ -16,6 +17,7 @@ docker run \
     -d \
     --restart always \
     --volumes-from "proxy-data" \
+    --volumes-from "proxy-encrypt-data" \
     -v /home/core/resource/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     jwilder/docker-gen \
@@ -23,12 +25,24 @@ docker run \
 
 # Automated SSL certificate generation for proxied containers.
 # Add the following argument below to use the Let's Encrypt staging environment (avoids rate limits, for testing):
-#     -e "ACME_CA_URI=https://acme-staging.api.letsencrypt.org/directory"
+#     -e "ACME_CA_URI=https://acme-staging.api.letsencrypt.org/directory" \
 docker run \
+	-e "ACME_CA_URI=https://acme-staging.api.letsencrypt.org/directory" \
 	--name "proxy-encrypt" \
 	-d \
     --restart always \
     -e NGINX_DOCKER_GEN_CONTAINER="proxy-generator" \
     --volumes-from "proxy-data" \
+    --volumes-from "proxy-encrypt-data" \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     jrcs/letsencrypt-nginx-proxy-companion
+
+# Shell container to trigger auto-generation of Let's Encrypt certificate for all required sub-domains
+docker run \
+	--name "proxy-encrypt-config" \
+	-d \
+	--restart always \
+    --volumes-from "proxy-encrypt-data" \
+	-e LETSENCRYPT_HOST="$SSL_DOMAINS" \
+	-e LETSENCRYPT_EMAIL="$SSL_EMAIL" \
+	nginx
