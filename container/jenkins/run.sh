@@ -1,5 +1,8 @@
 #! /bin/bash
 
+docker pull jenkins
+docker pull evarga/jenkins-slave
+
 # Jenkins.
 docker run \
 	--name "jenkins" \
@@ -11,6 +14,8 @@ docker run \
     -v /usr/lib/libdevmapper.so.1.02:/usr/lib/libdevmapper.so.1.02 \
 	-e VIRTUAL_HOST="$JENKINS_DOMAIN" \
 	-e VIRTUAL_PORT="8080" \
+	-e LETSENCRYPT_HOST="$JENKINS_DOMAIN" \
+	-e LETSENCRYPT_EMAIL="$SSL_EMAIL" \
 	jenkins
 
 # Jenkins slave for running Docker-reliant builds.
@@ -36,9 +41,14 @@ docker exec jenkins-slave-docker touch /home/jenkins/.ssh/authorized_keys
 docker exec jenkins-slave-docker chown -R jenkins:jenkins /home/jenkins/.ssh
 docker exec jenkins-slave-docker bash -c "echo $(docker exec jenkins cat /var/jenkins_home/.ssh/id_rsa.pub) > /home/jenkins/.ssh/authorized_keys"
 
-# Create docker user and group in Jenkins container with same ID as docker group on host machine
+# Create docker user and group in Jenkins slave container with same ID as docker group on host machine
 docker exec jenkins-slave-docker addgroup --gid $(ls -aln /var/run/docker.sock  | awk '{print $4}') docker
 docker exec jenkins-slave-docker adduser --gecos --disabled-login --disabled-password --uid $(ls -aln /var/run/docker.sock  | awk '{print $3}') --ingroup docker docker
 
 # Add jenkins user to docker group
 docker exec jenkins-slave-docker adduser jenkins docker
+
+# Install git in Jenkins slave
+docker exec jenkins-slave-docker apt-get update
+docker exec jenkins-slave-docker apt-get upgrade -y
+docker exec jenkins-slave-docker apt-get install git -y

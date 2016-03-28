@@ -1,5 +1,11 @@
 #! /bin/bash
 
+cp -r resource/reverse-proxy /home/core/resource/reverse-proxy
+
+docker pull nginx
+docker pull jwilder/docker-gen
+docker pull jrcs/letsencrypt-nginx-proxy-companion
+
 # Nginx proxy.
 docker run \
 	--name "proxy" \
@@ -18,7 +24,7 @@ docker run \
     --restart always \
     --volumes-from "proxy-data" \
     --volumes-from "proxy-encrypt-data" \
-    -v /home/core/resource/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
+    -v /home/core/resource/reverse-proxy/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     jwilder/docker-gen \
     -notify-sighup proxy -watch -only-exposed -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
@@ -27,7 +33,6 @@ docker run \
 # Add the following argument below to use the Let's Encrypt staging environment (avoids rate limits, for testing):
 #     -e "ACME_CA_URI=https://acme-staging.api.letsencrypt.org/directory" \
 docker run \
-	-e "ACME_CA_URI=https://acme-staging.api.letsencrypt.org/directory" \
 	--name "proxy-encrypt" \
 	-d \
     --restart always \
@@ -36,13 +41,3 @@ docker run \
     --volumes-from "proxy-encrypt-data" \
     -v /var/run/docker.sock:/var/run/docker.sock:ro \
     jrcs/letsencrypt-nginx-proxy-companion
-
-# Shell container to trigger auto-generation of Let's Encrypt certificate for all required sub-domains
-docker run \
-	--name "proxy-encrypt-config" \
-	-d \
-	--restart always \
-    --volumes-from "proxy-encrypt-data" \
-	-e LETSENCRYPT_HOST="$SSL_DOMAINS" \
-	-e LETSENCRYPT_EMAIL="$SSL_EMAIL" \
-	nginx

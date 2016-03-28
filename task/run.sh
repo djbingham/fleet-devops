@@ -3,10 +3,6 @@
 pushd "$( dirname "${BASH_SOURCE[0]}" )/.." > /dev/null
 
 echo ""
-echo "Copying resources to user home directory."
-cp -r resource /home/core/resource
-
-echo ""
 echo "Initialising reverse-proxy containers."
 . container/reverse-proxy/volumes.sh
 . container/reverse-proxy/run.sh

@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker stop jenkins
+docker stop jenkins jenkins-slave-docker
