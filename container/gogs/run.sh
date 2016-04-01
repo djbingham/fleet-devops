@@ -1,8 +1,19 @@
 #! /bin/bash
 
-cp -r resource/gogs /home/core/resource/gogs
+if [ ! -d "/home/core/resource" ]; then
+	mkdir /home/core/resource
+fi
+cp -r resource/gogs /home/core/resource
 
 docker pull gogs/gogs
+
+# Gogs data volume.
+if [ ! "$(docker ps -a --filter 'name=gogs-data')" == "" ]; then
+	docker run \
+	    --name "gogs-data" \
+	    --entrypoint /bin/true \
+	    gogs/gogs
+fi
 
 # Gogs git repository.
 docker run \

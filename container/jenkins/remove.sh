@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker rm -v jenkins jenkins-slave-docker jenkins-data
+docker rm -v jenkins jenkins-slave jenkins-data jenkins-slave-data

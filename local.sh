@@ -14,12 +14,12 @@ echo "-- Setting config."
 . config.sh
 
 echo ""
-echo "-- Running script $TASK.sh."
+echo "-- Running task $TASK."
 
 pushd /tmp/containers > /dev/null
 . $TASK.sh
 popd > /dev/null
 
 echo ""
-echo "-- /script $TASK.sh."
+echo "-- /task $TASK."
 echo ""

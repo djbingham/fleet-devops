@@ -2,6 +2,16 @@
 
 docker pull cedvan/toran-proxy
 
+# Toran-Proxy data volume.
+if [ ! "$(docker ps -a --filter 'name=toran-proxy-data')" == "" ]; then
+	docker run \
+		--name "toran-proxy-data" \
+		-v /data/toran-proxy \
+	    --entrypoint /bin/true \
+		cedvan/toran-proxy
+fi
+
+# Toran-Proxy.
 docker run \
 	--name "toran-proxy"\
 	-d \

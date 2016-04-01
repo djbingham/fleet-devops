@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker stop registry
+docker stop registry registry-web

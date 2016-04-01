@@ -1,3 +1,3 @@
 #! /bin/bash
 
-docker rm -v registry registry-data
+docker rm -v registry registry-data registry-web

@@ -1,10 +1,33 @@
 #! /bin/bash
 
-cp -r resource/reverse-proxy /home/core/resource/reverse-proxy
+if [ ! -d "/home/core/resource" ]; then
+	mkdir /home/core/resource
+fi
+cp -r resource/reverse-proxy /home/core/resource
 
 docker pull nginx
 docker pull jwilder/docker-gen
 docker pull jrcs/letsencrypt-nginx-proxy-companion
+
+# Volume for SSL certificates
+if [ ! "$(docker ps -a --filter 'name=proxy-encrypt-data')" == "" ]; then
+	docker run \
+	    --name "proxy-encrypt-data" \
+	    -v /etc/nginx/certs \
+	    --entrypoint /bin/true \
+	    nginx
+fi
+
+# Volumes for Nginx proxy
+if [ ! "$(docker ps -a --filter 'name=proxy-data')" == "" ]; then
+	docker run \
+	    --name "proxy-data" \
+	    -v /etc/nginx/conf.d  \
+	    -v /etc/nginx/vhost.d \
+	    -v /usr/share/nginx/html \
+		--entrypoint /bin/true \
+	    nginx
+fi
 
 # Nginx proxy.
 docker run \
