@@ -8,6 +8,8 @@ else
 	DOMAIN=$3
 fi
 
+. config.sh
+
 echo ""
 echo "-- Compacting scripts."
 tar -cf containers.tar ./*
@@ -21,19 +23,25 @@ echo "-- /Uploading scripts."
 echo ""
 
 ssh -T $HOST <<ENDSSH
+	# Transfer variables into host
 	DOMAIN=$DOMAIN
+	SCRIPTS_FOLDER=$SCRIPTS_FOLDER
+
+	echo ""
+	echo "-- Preparing scripts folder on host."
+	[[ -d $SCRIPTS_FOLDER ]] && rm -rf $SCRIPTS_FOLDER
+	mkdir $SCRIPTS_FOLDER
 
 	echo ""
 	echo "-- Unpacking scripts on host."
-	mkdir /tmp/containers
-	tar -xf /tmp/containers.tar -C /tmp/containers
+	tar -xf /tmp/containers.tar -C $SCRIPTS_FOLDER
 
-	pushd /tmp/containers > /dev/null
+	pushd $FOLDER > /dev/null
 	. local.sh $TASK $DOMAIN
 	popd > /dev/null
 
 	echo "-- Removing scripts from host."
-	rm -rf /tmp/containers.tar /tmp/containers
+	rm -rf /tmp/containers.tar
 ENDSSH
 
 echo "-- Removing compressed files from source."

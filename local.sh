@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/bash
 
 TASK=$1
 DOMAIN=$2
@@ -16,7 +16,7 @@ echo "-- Setting config."
 echo ""
 echo "-- Running task $TASK."
 
-pushd /tmp/containers > /dev/null
+pushd $SCRIPTS_FOLDER > /dev/null
 . $TASK.sh
 popd > /dev/null
 

@@ -1,0 +1,21 @@
+master:
+    container_name: jenkins-master
+    image: jenkins
+    environment:
+        - VIRTUAL_HOST="${JENKINS_DOMAIN}"
+        - VIRTUAL_PORT="8080"
+        - LETSENCRYPT_HOST="${JENKINS_DOMAIN}"
+        - LETSENCRYPT_EMAIL="${LETSENCRYPT_EMAIL}"
+    restart: always
+    volumes:
+        - jenkins-master-data:/var/jenkins_home
+
+slave:
+    container_name: jenkins-slave
+    image: evarga/jenkins-slave
+    restart: always
+    volumes:
+        - jenkins-slave-data:/home/jenkins
+        - /usr/bin/docker:/usr/bin/docker:ro
+        - /usr/lib/libdevmapper.so.1.02:/usr/lib/libdevmapper.so.1.02:ro
+        - /var/run/docker.sock:/var/run/docker.sock:ro

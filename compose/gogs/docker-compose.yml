@@ -1,0 +1,14 @@
+gogs:
+    container_name: gogs
+    image: gogs/gogs
+    environment:
+        - VIRTUAL_HOST="${GOGS_DOMAIN}"
+        - VIRTUAL_PORT="3000"
+        - LETSENCRYPT_HOST="${GOGS_DOMAIN}"
+        - LETSENCRYPT_EMAIL="${LETSENCRYPT_EMAIL}"
+    ports:
+        - "2200:22"
+    restart: always
+    volumes:
+        - gogs-data:/data
+        - ./resources/app.ini:/data/gogs/conf/app.ini:ro
