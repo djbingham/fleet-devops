@@ -29,7 +29,10 @@ $vm_memory = 1024
 $vm_cpus = 1
 $shared_folders = {}
 $forwarded_ports = {}
+$git_email = ""
+$git_name = ""
 
+# Check for Windows host, in case we need to use any Windows/Unix-specific features below
 $is_windows_host = (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
 
 # Attempt to apply the deprecated environment variable NUM_INSTANCES to
@@ -134,7 +137,6 @@ Vagrant.configure("2") do |config|
 			ip = "#{$instance_ip_prefix}#{i+100}"
 			config.vm.network :private_network, ip: ip
 
-			# Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
 			config.vm.synced_folder ".", "/home/core/share", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
 			$shared_folders.each_with_index do |(host_folder, guest_folder), index|
 				config.vm.synced_folder host_folder.to_s, guest_folder.to_s, id: "core-share%02d" % index, type: "nfs", mount_options: ['nolock,vers=3,udp']
@@ -148,6 +150,10 @@ Vagrant.configure("2") do |config|
 				config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
 				config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
 			end
+
+			# Configure git credentials
+			config.vm.provision :shell, :inline => "git config --global user.email '#{$git_email}'", :privileged => false
+			config.vm.provision :shell, :inline => "git config --global user.name '#{$git_name}'", :privileged => false
 
 			# Setup environment
 			config.vm.provision :shell, :inline => "cd /home/core/share && . environment/setup.sh"
