@@ -10,35 +10,32 @@ This repository is a collection of bash scripts for setting up a Docker-driven d
 
 ## Execution
 
-All tasks in this project should be executed via either `local.sh` or `remote.sh`.
+All tasks in this project should be executed via `run.sh`, in a manner such as:
 
-`remote.sh` will execute scripts on a remote server. It expects the following arguments:
+`. run.sh {{command}} --host={{host}} --hostDir={{hostDir}} --domain={{domain}} --letsEncryptEmail={{letsEncryptEmail}}`
 
-1. (required) The remote server URI (user@domain)
-2. (required) The task to run (relative path to the script file, excluding the ".sh" extension)
-3. (optional) The domain to use for virtual hosts and SSL certificates, if different from the remote server domain
+The order of arguments, including the command to run, is unimportant. The reognised arguments are as follows:
 
-`local.sh` will execute scripts on the local machine. It expects the following arguments:
-
-1. (required) The task to run (relative path to the script file, excluding the ".sh" extension)
-2. (required) The domain to use for virtual hosts and SSL certificates, if different from the remote server domain
+- `{{command}}` (required) Relative path to the script to be executed.
+- `{{host}}` (optional) The remote server to execute the command on. Default: empty (will execute command locally)
+- `{{hostDir}}` (optional) Directory into which files should be placed on the server (a subdirectory named `containers` will be created here). Default: `/home/core`
+- `{{domain}}` (required) Domain to use for projects and SSL certificates
+- `{{letsEncryptEmail}}` (optional) Email address to give to Let's Encrypt when requesting SSL certificates. Default: as per `config.sh`
 
 ## Examples
 
 ```
-# Run containers on the davidjbingham.co.uk server
-./remote.sh core@davidjbingham.co.uk task/run
+# Run all containers locally, for the domain davidjbinghamdev.co.uk
+. run.sh compose/up --host=localhost --hostDir=/home/core --domain=davidjbinghamdev.co.uk --letsEncryptEmail=encrypt@davidjbingham.co.uk
 
-# Run containers on the davidjbingham.co.uk server with hosts and certificates set for djhodgkinson.co.uk domains
-./remote.sh core@davidjbingham.co.uk task/run djhodgkinson.co.uk
+# Run all containers on the davidjbingham.co.uk server
+. run.sh compose/up --host=core@davidjbingham.co.uk --hostDir=/home/core --domain=davidjbingham.co.uk --letsEncryptEmail=encrypt@davidjbingham.co.uk
 ```
 
 ## Project Structure
 
-The primary scripts, `local.sh` and `remote.sh`, depend on the rest of the files in this project to perform operations. It is not recommended to run any of the other scripts directly, as they may have dependencies on specific variables being set, which is managed by the primary scripts. The structure of the project files follows.
+The primary script, `run.sh`, depends on the rest of the files in this project to perform operations. It is not recommended to run any of the other scripts directly, as they may have dependencies on specific variables being set, which is managed by the primary scripts. The structure of the project files follows.
 
-The `task` directory contains scripts which perform bulk actions for all containers managed by this project, usually by iterating through the equivalent scripts for each set of containers.
+The `compose` directory contains scripts and and folders. Each folder contains `docker-compose.yml` and scripts for management of a set of containers for a single application. The scripts in the `compose` directory offer bulk management of all containers for all applications managed through this project.
 
-The `container` directory contains a folder per service from the list above. Each service requires one or more containers and volumes and each service directory contains scripts for managing those.
-
-The `resource` directory contains configuration files and other resources required by one or more of the services.
+The `environment` directory contains configuration files and installation scripts required to set-up a server to be managed by this project. It also includes resources used by the Vagrantfile to intialise a virtualised development environment for testing changes.
