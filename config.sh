@@ -7,8 +7,8 @@ DOMAIN="davidjbingham.co.uk"
 LETSENCRYPT_EMAIL="letsencrypt@davidjbingham.co.uk"
 
 # Override defaults for any optional arguments provided
-[[ "${NAMED_ARGUMENTS['domain']}" == "" ]] || DOMAIN=${NAMED_ARGUMENTS['domain']}
-[[ "${NAMED_ARGUMENTS['letsEncryptEmail']}" == "" ]] || LETSENCRYPT_EMAIL=${NAMED_ARGUMENTS['letsEncryptEmail']}
+[[ "${NAMED_ARGUMENTS['domain']}" == "" ]] || DOMAIN="${NAMED_ARGUMENTS['domain']}"
+[[ "${NAMED_ARGUMENTS['letsEncryptEmail']}" == "" ]] || LETSENCRYPT_EMAIL="${NAMED_ARGUMENTS['letsEncryptEmail']}"
 
 # Set sub-domains for projects to run under
 export GOGS_DOMAIN="git.$DOMAIN"

@@ -24,8 +24,8 @@ HOST=""
 HOST_DIR="/home/core/containers"
 
 # Override defaults for any optional arguments provided
-[[ "${NAMED_ARGUMENTS['host']}" == "" ]] || HOST=${NAMED_ARGUMENTS['host']}
-[[ "${NAMED_ARGUMENTS['hostDir']}" == "" ]] || HOST_DIR=${NAMED_ARGUMENTS['hostDir']}
+[[ "${NAMED_ARGUMENTS['host']}" == "" ]] || HOST="${NAMED_ARGUMENTS['host']}"
+[[ "${NAMED_ARGUMENTS['hostDir']}" == "" ]] || HOST_DIR="${NAMED_ARGUMENTS['hostDir']}/containers"
 
 if [ "$HOST" == "" ]; then
 	(
