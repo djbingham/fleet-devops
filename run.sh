@@ -64,8 +64,8 @@ else
 			echo "-- Unpacking scripts on host."
 			tar -xf /tmp/containers.tar -C $HOST_DIR
 
-			. config.sh
 			pushd $HOST_DIR > /dev/null
+			. config.sh
 			. $COMMAND.sh $UNNAMED_ARGUMENTS
 			popd > /dev/null
 
