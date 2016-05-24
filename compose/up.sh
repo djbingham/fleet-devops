@@ -6,6 +6,6 @@ pushd "$( dirname "${BASH_SOURCE[0]}" )" > /dev/null
 . jenkins/up.sh
 . registry/up.sh
 . reverse-proxy/up.sh
-# . toran-proxy/up.sh
+. toran-proxy/up.sh
 
 popd > /dev/null
