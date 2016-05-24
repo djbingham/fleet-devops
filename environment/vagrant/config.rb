@@ -6,13 +6,13 @@ $new_discovery_url="https://discovery.etcd.io/new?size=#{$num_instances}"
 
 # Automatically replace the discovery token on 'vagrant up'
 
-if File.exists?('user-data') && ARGV[0].eql?('up')
+if File.exists?('environment/vagrant/user-data.yml') && ARGV[0].eql?('up')
   require 'open-uri'
   require 'yaml'
 
   token = open($new_discovery_url).read
 
-  data = YAML.load(IO.readlines('user-data')[1..-1].join)
+  data = YAML.load(IO.readlines('environment/vagrant/user-data.yml')[1..-1].join)
 
   if data.key? 'coreos' and data['coreos'].key? 'etcd'
     data['coreos']['etcd']['discovery'] = token
@@ -30,7 +30,7 @@ if File.exists?('user-data') && ARGV[0].eql?('up')
   end
 
   yaml = YAML.dump(data)
-  File.open('user-data', 'w') { |file| file.write("#cloud-config\n\n#{yaml}") }
+  File.open('environment/vagrant/user-data.yml', 'w') { |file| file.write("#cloud-config\n\n#{yaml}") }
 end
 
 #
@@ -43,7 +43,7 @@ end
 # Change basename of the VM
 # The default value is "core", which results in VMs named starting with
 # "core-01" through to "core-${num_instances}".
-$instance_name_prefix="project"
+$instance_name_prefix="development-server"
 
 # Change base IP address of the VM
 # The default value is "192.168.100.", which results in VMs with IP addresses
