@@ -1,0 +1,14 @@
+[Unit]
+Description=Jenkins Master Service
+Requires=docker.service
+PartOf=reverse-proxy-encrypt.service
+After=reverse-proxy-encrypt.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill jenkins-master
+ExecStartPre=-/usr/bin/docker rm jenkins-master
+ExecStartPre=/usr/bin/docker pull nginx
+ExecStart=/usr/bin/docker run --name "jenkins-master" --env-file "/home/core/share/unit-resources/jenkins/env.list" -v "jenkins-master-data:/var/jenkins_home" jenkins
+ExecStartPost=/usr/bin/docker run --rm --volumes-from jenkins-master --user root --entrypoint chown jenkins -R jenkins:jenkins /var/jenkins_home
+ExecStop=/usr/bin/docker stop jenkins-master

@@ -1,0 +1,14 @@
+[Unit]
+Description=Toran Proxy Service
+Requires=docker.service
+After=docker.service
+PartOf=reverse-proxy-encrypt.service
+After=reverse-proxy-encrypt.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill toran-proxy
+ExecStartPre=-/usr/bin/docker rm toran-proxy
+ExecStartPre=/usr/bin/docker pull cedvan/toran-proxy
+ExecStart=/usr/bin/docker run --name "toran-proxy" --env-file "/home/core/share/unit-resources/toran-proxy/env.list" -v "toran-data:/data" cedvan/toran-proxy
+ExecStop=/usr/bin/docker stop toran-proxy

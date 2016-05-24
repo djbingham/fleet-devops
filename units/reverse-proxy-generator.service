@@ -1,0 +1,12 @@
+[Unit]
+Description=Reverse-Proxy Automated Config Generation Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill reverse-proxy-generator
+ExecStartPre=-/usr/bin/docker rm reverse-proxy-generator
+ExecStartPre=/usr/bin/docker pull jwilder/docker-gen
+ExecStart=/usr/bin/docker run --name "reverse-proxy-generator" -v "proxy-certs:/etc/nginx/certs" -v "proxy-conf:/etc/nginx/conf.d" -v "proxy-vhost:/etc/nginx/vhost.d" -v "proxy-webroot:/usr/share/nginx/html" -v "/home/core/share/unit-resources/reverse-proxy-generator/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro" -v "/var/run/docker.sock:/tmp/docker.sock:ro" --entrypoint "/usr/local/bin/docker-gen" jwilder/docker-gen -notify-sighup reverse-proxy -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+ExecStop=/usr/bin/docker stop reverse-proxy-generator

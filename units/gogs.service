@@ -1,0 +1,14 @@
+[Unit]
+Description=Go Git Service
+Requires=docker.service
+After=docker.service
+PartOf=reverse-proxy-encrypt.service
+After=reverse-proxy-encrypt.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill gogs
+ExecStartPre=-/usr/bin/docker rm gogs
+ExecStartPre=/usr/bin/docker pull gogs/gogs
+ExecStart=/usr/bin/docker run --name "gogs" -p "2200:22" --env-file "/home/core/share/unit-resources/gogs/env.list" -v "gogs-data:/data" -v "/home/core/share/unit-resources/gogs/app.ini:/data/gogs/conf/app.ini:ro" gogs/gogs
+ExecStop=/usr/bin/docker stop gogs
