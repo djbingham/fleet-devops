@@ -1,7 +1,7 @@
 [Unit]
 Description=Docker Registry Web Service
-Requires=reverse-proxy-encrypt.service
-After=reverse-proxy-encrypt.service
+Requires=docker-registry.service
+After=docker-registry.service
 
 [Service]
 TimeoutStartSec=0
