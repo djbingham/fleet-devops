@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Destroy, resubmit and start all units
+command=$1
+
 pushd "$( dirname "${BASH_SOURCE[0]}" )/../units" > /dev/null
 
 units="reverse-proxy reverse-proxy-generator reverse-proxy-encrypt"
@@ -9,11 +10,8 @@ units="$units gogs"
 units="$units toran-proxy"
 units="$units jenkins-master jenkins-slave@1"
 
-echo "Restarting units: $units"
+echo "Executing fleetctl $1 $units"
 
-fleetctl destroy $units
-fleetctl submit $units
-fleetctl load $units
-fleetctl start $units
+fleetctl $1 $units
 
 popd > /dev/null

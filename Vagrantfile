@@ -12,7 +12,7 @@ require 'fileutils'
 
 Vagrant.require_version ">= 1.6.0"
 
-CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "environment", "vagrant", "user-data.yml")
+CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "environment", "vagrant", "cloud-config.yml")
 CONFIG = File.join(File.dirname(__FILE__), "environment", "vagrant", "config.rb")
 CUSTOM_PROVISION_PATH = File.join(File.dirname(__FILE__), "environment", "vagrant", "custom-provision.sh")
 
@@ -147,8 +147,8 @@ Vagrant.configure("2") do |config|
 			end
 
 			if File.exist?(CLOUD_CONFIG_PATH)
-				config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-user-data"
-				config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-user-data /var/lib/coreos-vagrant/", :privileged => true
+				config.vm.provision :file, :source => "#{CLOUD_CONFIG_PATH}", :destination => "/tmp/vagrantfile-cloud-config"
+				config.vm.provision :shell, :inline => "mv /tmp/vagrantfile-cloud-config /var/lib/coreos-vagrant/vagrantfile-user-data", :privileged => true
 			end
 
 			# Configure git credentials
@@ -160,6 +160,9 @@ Vagrant.configure("2") do |config|
 
 			# Set default directory for vagrant ssh
 			config.vm.provision :shell, :inline => "echo 'cd /home/core/share' >> .bashrc"
+
+			# Load units
+			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh load . task/fleet.sh start"
 
 			# Optional custom provisioning script, specific to project
 			if File.file?(CUSTOM_PROVISION_PATH)
