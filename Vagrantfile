@@ -162,7 +162,9 @@ Vagrant.configure("2") do |config|
 			config.vm.provision :shell, :inline => "echo 'cd /home/core/share' >> .bashrc"
 
 			# Load units
-			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh load . task/fleet.sh start"
+			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh submit"
+			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh load"
+			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh start"
 
 			# Optional custom provisioning script, specific to project
 			if File.file?(CUSTOM_PROVISION_PATH)
