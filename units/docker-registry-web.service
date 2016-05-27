@@ -1,6 +1,8 @@
 [Unit]
 Description=Docker Registry Web Service
-Requires=docker-registry.service
+Requires=docker.service
+After=docker.service
+PartOf=docker-registry.service
 After=docker-registry.service
 
 [Service]

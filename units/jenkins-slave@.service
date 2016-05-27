@@ -1,9 +1,10 @@
 [Unit]
 Description=Jenkins Slave Service
-Requires=jenkins-master.service
+Requires=docker.service
+After=docker.service
+PartOf=jenkins-master.service
 After=jenkins-master.service
 BindsTo=jenkins-master.service
-PartOf=jenkins-master.service
 
 [Service]
 TimeoutStartSec=0
