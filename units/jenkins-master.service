@@ -1,14 +1,21 @@
 [Unit]
 Description=Jenkins Master Service
 Requires=docker.service
+After=docker.service
 PartOf=reverse-proxy-encrypt.service
 After=reverse-proxy-encrypt.service
 
 [Service]
 TimeoutStartSec=0
+ExecStartPre=/usr/bin/docker volume create --name=jenkins-master-data
+ExecStartPre=-/usr/bin/docker kill jenkins-master-tmp
+ExecStartPre=-/usr/bin/docker rm jenkins-master-tmp
+ExecStartPre=/usr/bin/docker run --name "jenkins-master-tmp" -v "jenkins-master-data:/var/jenkins_home" -d busybox tail -f /dev/null
+ExecStartPre=/usr/bin/docker run --rm -v "jenkins-master-data:/var/jenkins_home" --user root --entrypoint "chown" jenkins -R jenkins:jenkins /var/jenkins_home
+ExecStartPre=-/usr/bin/docker kill jenkins-master-tmp
+ExecStartPre=-/usr/bin/docker rm jenkins-master-tmp
 ExecStartPre=-/usr/bin/docker kill jenkins-master
 ExecStartPre=-/usr/bin/docker rm jenkins-master
-ExecStartPre=/usr/bin/docker pull nginx
+ExecStartPre=/usr/bin/docker pull jenkins
 ExecStart=/usr/bin/docker run --name "jenkins-master" --env-file "/home/core/share/unit-resources/jenkins/env.list" -v "jenkins-master-data:/var/jenkins_home" jenkins
-ExecStartPost=/usr/bin/docker run --rm --volumes-from jenkins-master --user root --entrypoint chown jenkins -R jenkins:jenkins /var/jenkins_home
 ExecStop=/usr/bin/docker stop jenkins-master
