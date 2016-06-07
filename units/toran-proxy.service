@@ -2,13 +2,12 @@
 Description=Toran Proxy Service
 Requires=docker.service
 After=docker.service
-PartOf=reverse-proxy-encrypt.service
 After=reverse-proxy-encrypt.service
 
 [Service]
 TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill toran-proxy
 ExecStartPre=-/usr/bin/docker rm toran-proxy
-ExecStartPre=/usr/bin/docker pull cedvan/toran-proxy
-ExecStart=/usr/bin/docker run --name "toran-proxy" --env-file "/home/core/share/unit-resources/toran-proxy/env.list" -v "toran-data:/data" cedvan/toran-proxy
+ExecStartPre=/usr/bin/docker pull djbingham/toran-proxy:feature_upgrade-toran-proxy-1.4.4
+ExecStart=/usr/bin/docker run --name "toran-proxy" --env-file "/home/core/share/unit-resources/toran-proxy/env.list" -v "toran-data:/data/toran-proxy" -v "toran-cache:/var/www/app/cache" djbingham/toran-proxy:feature_upgrade-toran-proxy-1.4.4
 ExecStop=/usr/bin/docker stop toran-proxy
