@@ -2,7 +2,6 @@
 Description=Jenkins Master Service
 Requires=docker.service
 After=docker.service
-PartOf=reverse-proxy-encrypt.service
 After=reverse-proxy-encrypt.service
 
 [Service]
