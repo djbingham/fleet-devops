@@ -4,6 +4,7 @@ Description=Go Git Service
 Requires=docker.service
 After=docker.service
 
+Wants=reverse-proxy-encrypt.service
 After=reverse-proxy-encrypt.service
 
 [Service]
