@@ -7,6 +7,8 @@ After=docker.service
 Wants=reverse-proxy-encrypt.service
 After=reverse-proxy-encrypt.service
 
+Wants=jenkins-slave.service
+
 [Service]
 TimeoutStartSec=0
 
