@@ -1,0 +1,20 @@
+[Unit]
+Description=Shipyard data store
+
+Requires=docker.service
+After=docker.service
+
+PartOf=shipyard-controller
+Before=shipyard-controller
+
+[Service]
+TimeoutStartSec=0
+
+# Start procedure
+ExecStartPre=-/usr/bin/docker kill shipyard-db
+ExecStartPre=-/usr/bin/docker rm shipyard-db
+ExecStartPre=-/usr/bin/docker pull rethinkdb
+ExecStart=/usr/bin/docker run --name shipyard-db rethinkdb
+
+# Stop procedure
+ExecStop=/usr/bin/docker stop shipyard-db

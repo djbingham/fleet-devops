@@ -161,6 +161,10 @@ Vagrant.configure("2") do |config|
 			# Set default directory for vagrant ssh
 			config.vm.provision :shell, :inline => "echo 'cd /home/core/share' >> .bashrc"
 
+			# Destroy any existing units/containers/volumes before reloading
+			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh destroy"
+			config.vm.provision :shell, :inline => "if ! [ $(docker ps -aq) -eq "" ]; then docker rm -v $(docker ps -aq); fi"
+
 			# Load units
 			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh submit"
 			config.vm.provision :shell, :inline => "cd /home/core/share && . task/fleet.sh load"

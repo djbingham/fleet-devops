@@ -1,0 +1,19 @@
+[Unit]
+Description=Shipyard swarm agent
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+
+# Get CoreOS environmental variables
+EnvironmentFile=/etc/environment
+
+# Start procedure
+ExecStartPre=-/usr/bin/docker kill swarm-agent-%i
+ExecStartPre=-/usr/bin/docker rm swarm-agent-%i
+#ExecStartPre=-/usr/bin/docker pull swarm
+ExecStart=/usr/bin/docker run --name swarm-agent-%i swarm join --addr ${COREOS_PRIVATE_IPV4}:2375 etcd://${COREOS_PRIVATE_IPV4}:2379
+
+# Stop procedure
+ExecStop=/usr/bin/docker stop swarm-agent-%i

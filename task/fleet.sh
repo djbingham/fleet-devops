@@ -9,9 +9,10 @@ units="$units docker-registry docker-registry-web"
 units="$units gogs"
 units="$units toran-proxy"
 units="$units jenkins-master jenkins-slave@1"
+units="$units shipyard-controller shipyard-db swarm-manager"
 
 echo "Executing fleetctl $1 $units"
 
-fleetctl $1 $units
+fleetctl ${command} ${units}
 
 popd > /dev/null
