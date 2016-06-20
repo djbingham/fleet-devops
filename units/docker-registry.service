@@ -1,13 +1,19 @@
 [Unit]
 Description=Docker Registry Service
+
 Requires=docker.service
 After=docker.service
+
 After=reverse-proxy-encrypt.service
 
 [Service]
 TimeoutStartSec=0
+
+# Start procedure
 ExecStartPre=-/usr/bin/docker kill docker-registry
 ExecStartPre=-/usr/bin/docker rm docker-registry
-ExecStartPre=/usr/bin/docker pull registry
+ExecStartPre=-/usr/bin/docker pull registry
 ExecStart=/usr/bin/docker run --name "docker-registry" -p "5000:5000" --env-file "/home/core/share/unit-resources/docker-registry/env.list" -v "registry-data:/var/lib/registry" -v "proxy-certs:/etc/nginx/certs:ro" registry
+
+# Stop procedure
 ExecStop=/usr/bin/docker stop docker-registry

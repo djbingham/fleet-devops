@@ -1,15 +1,21 @@
 [Unit]
 Description=Jenkins Slave Service
+
 Requires=docker.service
 After=docker.service
+
 PartOf=jenkins-master.service
 After=jenkins-master.service
 BindsTo=jenkins-master.service
 
 [Service]
 TimeoutStartSec=0
+
+# Start procedure
 ExecStartPre=-/usr/bin/docker kill jenkins-slave-%i
 ExecStartPre=-/usr/bin/docker rm jenkins-slave-%i
-ExecStartPre=/usr/bin/docker pull evarga/jenkins-slave
+ExecStartPre=-/usr/bin/docker pull evarga/jenkins-slave
 ExecStart=/usr/bin/docker run --name "jenkins-slave-%i" -v "jenkins-slave-%i-data:/home/jenkins" -v "/usr/bin/docker:/usr/bin/docker:ro" -v "/usr/lib/libdevmapper.so.1.02:/usr/lib/libdevmapper.so.1.02:ro" -v "/var/run/docker.sock:/var/run/docker.sock:ro" evarga/jenkins-slave
+
+# Stop procedure
 ExecStop=/usr/bin/docker stop jenkins-slave-%i

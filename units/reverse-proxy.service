@@ -1,13 +1,19 @@
 [Unit]
 Description=Reverse-Proxy Service
+
 Requires=docker.service
 After=docker.service
+
 After=reverse-proxy-generator.service
 
 [Service]
 TimeoutStartSec=0
+
+# Start procedure
 ExecStartPre=-/usr/bin/docker kill reverse-proxy
 ExecStartPre=-/usr/bin/docker rm reverse-proxy
-ExecStartPre=/usr/bin/docker pull nginx
+ExecStartPre=-/usr/bin/docker pull nginx
 ExecStart=/usr/bin/docker run --name "reverse-proxy" -p "80:80" -p "443:443" -v "proxy-certs:/etc/nginx/certs" -v "proxy-conf:/etc/nginx/conf.d" -v "proxy-vhost:/etc/nginx/vhost.d" -v "proxy-webroot:/usr/share/nginx/html" nginx
+
+# Stop procedure
 ExecStop=/usr/bin/docker stop reverse-proxy
