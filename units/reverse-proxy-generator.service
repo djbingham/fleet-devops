@@ -1,8 +1,11 @@
 [Unit]
 Description=Reverse-Proxy Automated Config Generation Service
 
-Requires=docker.service
-After=docker.service
+Requires=docker
+After=docker
+
+Wants=reverse-proxy
+Before=reverse-proxy
 
 [Service]
 TimeoutStartSec=0

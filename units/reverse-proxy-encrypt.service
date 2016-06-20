@@ -1,10 +1,14 @@
 [Unit]
 Description=Reverse-Proxy Automated Let's Encrypt Service
 
-Requires=docker.service
-After=docker.service
+Requires=docker
+After=docker
 
-After=reverse-proxy-generator.service
+Wants=reverse-proxy-generator
+After=reverse-proxy-generator
+
+Wants=reverse-proxy
+Before=reverse-proxy
 
 [Service]
 TimeoutStartSec=0
