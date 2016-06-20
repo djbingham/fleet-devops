@@ -5,7 +5,7 @@ command=$1
 pushd "$( dirname "${BASH_SOURCE[0]}" )/../units" > /dev/null
 
 units="reverse-proxy reverse-proxy-generator reverse-proxy-encrypt"
-units="$units docker-registry docker-registry-web"
+units="$units docker-registry"
 units="$units gogs"
 units="$units toran-proxy"
 units="$units jenkins-master jenkins-slave@1"
