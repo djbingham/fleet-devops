@@ -4,8 +4,8 @@ Description=Shipyard data store
 Requires=docker.service
 After=docker.service
 
-PartOf=shipyard-controller
-Before=shipyard-controller
+PartOf=shipyard-controller.service
+Before=shipyard-controller.service
 
 [Service]
 TimeoutStartSec=0

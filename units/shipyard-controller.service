@@ -4,11 +4,11 @@ Description=Shipyard controller
 Requires=docker.service
 After=docker.service
 
-Requires=shipyard-db
-After=shipyard-db
+Requires=shipyard-db.service
+After=shipyard-db.service
 
-Requires=swarm-manager
-After=swarm-manager
+Requires=swarm-manager.service
+After=swarm-manager.service
 
 [Service]
 TimeoutStartSec=0
