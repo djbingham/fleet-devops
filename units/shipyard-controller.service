@@ -10,6 +10,9 @@ After=shipyard-db.service
 Requires=swarm-manager.service
 After=swarm-manager.service
 
+Wants=reverse-proxy-encrypt.service
+After=reverse-proxy-encrypt.service
+
 [Service]
 TimeoutStartSec=0
 
@@ -17,7 +20,7 @@ TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill shipyard-controller
 ExecStartPre=-/usr/bin/docker rm shipyard-controller
 ExecStartPre=-/usr/bin/docker pull shipyard/shipyard
-ExecStart=/usr/bin/docker run --name shipyard-controller --link shipyard-db:rethinkdb --link swarm-manager:swarm -p 8080:8080 shipyard/shipyard server -d tcp://swarm:2375
+ExecStart=/usr/bin/docker run --name shipyard-controller --env-file "/home/core/share/unit-resources/shipyard-controller/env.list" --link shipyard-db:rethinkdb --link swarm-manager:swarm shipyard/shipyard server -d tcp://swarm:2375
 
 # Stop procedure
 ExecStop=/usr/bin/docker stop shipyard-controller
