@@ -14,12 +14,7 @@ TimeoutStartSec=0
 
 # Start procedure
 ExecStartPre=/usr/bin/docker volume create --name=jenkins-master-data
-ExecStartPre=-/usr/bin/docker kill jenkins-master-tmp
-ExecStartPre=-/usr/bin/docker rm jenkins-master-tmp
-ExecStartPre=/usr/bin/docker run --name "jenkins-master-tmp" -v "jenkins-master-data:/var/jenkins_home" busybox tail -f /dev/null
 ExecStartPre=/usr/bin/docker run --rm -v "jenkins-master-data:/var/jenkins_home" --user root --entrypoint "chown" jenkins -R jenkins:jenkins /var/jenkins_home
-ExecStartPre=-/usr/bin/docker kill jenkins-master-tmp
-ExecStartPre=-/usr/bin/docker rm jenkins-master-tmp
 ExecStartPre=-/usr/bin/docker kill jenkins-master
 ExecStartPre=-/usr/bin/docker rm jenkins-master
 ExecStartPre=-/usr/bin/docker pull jenkins
