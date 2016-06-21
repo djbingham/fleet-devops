@@ -9,7 +9,7 @@ units="$units docker-registry"
 units="$units gogs"
 units="$units toran-proxy"
 units="$units jenkins-master jenkins-slave@1"
-units="$units shipyard-controller shipyard-db swarm-manager"
+units="$units shipyard-controller shipyard-db swarm-manager swarm-agent@1"
 
 echo "Executing fleetctl $1 $units"
 
