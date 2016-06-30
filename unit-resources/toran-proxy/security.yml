@@ -1,0 +1,24 @@
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 13
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    admin: { password: $2y$13$IZaLMVtL9AGxyyxof9.4juM3nGynklXINOc8nw6Yher6eXHC/ABtm, roles: [ 'ROLE_ADMIN' ] }
+
+    firewalls:
+        secured_area:
+            pattern: ^/
+            http_basic:
+                realm: "Toran proxy access"
+
+    access_control:
+        - { path: ^/, roles: ROLE_ADMIN } # restrict website access to admin only
+        - { path: ^/repo, roles: IS_AUTHENTICATED_ANONYMOUSLY } # allow repo access to unauthenticated users
