@@ -1,5 +1,5 @@
 dist_sync_mode: lazy
-git_prefix: git@davidjbingham.co.uk
+git_prefix: git@git.davidjbingham.co.uk
 git_path: /data/toran-proxy/mirrors
 license: null
 license_personal: true
