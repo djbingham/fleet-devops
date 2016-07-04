@@ -11,7 +11,11 @@ security:
         in_memory:
             memory:
                 users:
-                    admin: { password: $2y$13$IZaLMVtL9AGxyyxof9.4juM3nGynklXINOc8nw6Yher6eXHC/ABtm, roles: [ 'ROLE_ADMIN' ] }
+                    # Passwords hashed by:
+                    # php -r "echo password_hash('password', PASSWORD_BCRYPT, ['cost' => 13]) . PHP_EOL;"
+                    admin:
+                        password: $2y$13$C25KvW7Zj8m.iMh7R6bgbOE/TC.4KBcYIts9tE52QXkV.GTam.GR2
+                        roles: [ ROLE_ADMIN ]
 
     firewalls:
         secured_area:
