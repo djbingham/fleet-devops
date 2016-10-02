@@ -42,7 +42,7 @@ end
 # Change basename of the VM
 # The default value is "core", which results in VMs named starting with
 # "core-01" through to "core-${num_instances}".
-$instance_name_prefix="development-server"
+$instance_name_prefix="devops"
 
 # Change base IP address of the VM
 # The default value is "192.168.100.", which results in VMs with IP addresses
