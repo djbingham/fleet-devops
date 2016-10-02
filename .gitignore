@@ -1,3 +1,11 @@
 .vagrant
 .idea
 environment/vagrant/cloud-config.yml
+unit-resources/docker-registry/env.list
+unit-resources/gogs/app.ini
+unit-resources/gogs/env.list
+unit-resources/jenkins/env.list
+unit-resources/shipyard-controller/env.list
+unit-resources/toran-proxy/config.yml
+unit-resources/toran-proxy/env.list
+unit-resources/toran-proxy/security.yml

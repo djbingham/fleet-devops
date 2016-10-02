@@ -1,0 +1,9 @@
+dist_sync_mode: lazy
+git_prefix: git@git.domain.com
+git_path: /data/toran-proxy/mirrors
+license: null
+license_personal: true
+packagist_sync: proxy
+public_packages: {}
+public_repositories: {}
+repositories: {}

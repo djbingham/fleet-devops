@@ -12,6 +12,8 @@ This project aims to automate deployment of a collection of open-source dev-ops 
 
 Bash scripts are provided to start all of the above as a suite of Systemd units, orchestrated by Fleet.
 
+Note that the `unit-resources` directory contains sample configuration files for each unit. Each of the files whose name begins `sample.` should be copied and pasted to the same location, with `sample.` removed from the file name. In each of the new configuration files, domains should be replaced with the domain from which each unit should expect to be accessed, and any security details (passwords, encryption keys, etc.) should be replaced with appropriate values unique to each installation.
+
 ## Execution
 
 All tasks in this project should be executed via `run.sh`, in a manner such as:

@@ -14,7 +14,7 @@ security:
                     # Passwords hashed by:
                     # php -r "echo password_hash('password', PASSWORD_BCRYPT, ['cost' => 13]) . PHP_EOL;"
                     admin:
-                        password: $2y$13$CRN/Y1lw/.35f7q8lRIOVuz1R42LdD3UetF4HaK3ZDP8ykqbdeLP6
+                        password: $2y$13$OVTf3Mc7MLHyYee876oMQenXfxJgRSRCC2qSp6WXunm6sLa.P12Je
                         roles: [ ROLE_ADMIN ]
 
     firewalls:
