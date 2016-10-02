@@ -1,12 +1,16 @@
-# Development Server
+# Fleet-DevOps
 
-This repository is a collection of bash scripts for setting up a Docker-driven development server, with the following services:
+This project aims to automate deployment of a collection of open-source dev-ops software to a CoreOS cluster:
 
 1. Git repository
 2. Docker registry
-3. Reverse proxy (Nginx)
-4. Auto-generation of reverse proxy configurations for each Docker container
-5. Auto-generation and configuration of SSL certificates for each Docker container
+3. Composer package repository
+4. Jenkins
+5. Reverse proxy (Nginx)
+6. Auto-generation of reverse proxy configurations to forward domain request to the appropriate Docker containers
+7. Auto-generation of SSL certificates for each domain configured for the reverse-proxy
+
+Bash scripts are provided to start all of the above as a suite of Systemd units, orchestrated by Fleet.
 
 ## Execution
 
@@ -14,7 +18,7 @@ All tasks in this project should be executed via `run.sh`, in a manner such as:
 
 `. run.sh {{command}} --host={{host}} --hostDir={{hostDir}} --domain={{domain}} --letsEncryptEmail={{letsEncryptEmail}}`
 
-The order of arguments, including the command to run, is unimportant. The reognised arguments are as follows:
+The order of arguments, including the command to run, is unimportant. The recognised arguments are as follows:
 
 - `{{command}}` (required) Relative path to the script to be executed.
 - `{{host}}` (optional) The remote server to execute the command on. Default: empty (will execute command locally)
